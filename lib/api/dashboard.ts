@@ -120,7 +120,7 @@ export async function retrainModel(modelId: string) {
   }
 }
 
-// ========== MOCK DATA (untuk development) ==========
+// ========== MOCK DATA (be blom jadi) ==========
 
 function getMockKPIData(): KPIDashboardData {
   return {
