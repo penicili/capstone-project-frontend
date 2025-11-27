@@ -10,7 +10,7 @@ interface KPISectionProps {
 export default function KPISection({ category }: KPISectionProps) {
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-gray-900 mb-4">
         {category.category}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

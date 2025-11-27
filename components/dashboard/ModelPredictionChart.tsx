@@ -28,12 +28,12 @@ export default function ModelPredictionChart({ model }: ModelPredictionChartProp
   }));
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-6">
       <div className="mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <h3 className="text-lg font-semibold text-gray-900">
           {model.name}
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+        <p className="text-sm text-gray-600 mt-1">
           {model.description}
         </p>
       </div>
@@ -41,22 +41,22 @@ export default function ModelPredictionChart({ model }: ModelPredictionChartProp
       {/* Model Info */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">Model Type</p>
-          <p className="text-sm font-medium text-gray-900 dark:text-white">{model.modelType}</p>
+          <p className="text-xs text-gray-500">Model Type</p>
+          <p className="text-sm font-medium text-gray-900">{model.modelType}</p>
         </div>
         <div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">Accuracy</p>
+          <p className="text-xs text-gray-500">Accuracy</p>
           <p className="text-sm font-medium text-green-600">{model.metrics.accuracy.toFixed(1)}%</p>
         </div>
         <div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">R² Score</p>
-          <p className="text-sm font-medium text-gray-900 dark:text-white">
+          <p className="text-xs text-gray-500">R² Score</p>
+          <p className="text-sm font-medium text-gray-900">
             {model.metrics.r2Score.toFixed(2)}
           </p>
         </div>
         <div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">Last Trained</p>
-          <p className="text-sm font-medium text-gray-900 dark:text-white">
+          <p className="text-xs text-gray-500">Last Trained</p>
+          <p className="text-sm font-medium text-gray-900">
             {new Date(model.lastTrained).toLocaleDateString('id-ID')}
           </p>
         </div>
@@ -148,12 +148,12 @@ export default function ModelPredictionChart({ model }: ModelPredictionChartProp
 
       {/* Features */}
       <div className="mt-6">
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Key Features:</p>
+        <p className="text-xs text-gray-500 mb-2">Key Features:</p>
         <div className="flex flex-wrap gap-2">
           {model.features.map((feature, index) => (
             <span
               key={index}
-              className="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full"
+              className="px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full"
             >
               {feature}
             </span>

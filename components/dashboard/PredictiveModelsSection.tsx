@@ -12,7 +12,7 @@ export default function PredictiveModelsSection({ data }: PredictiveModelsSectio
   return (
     <div className="space-y-8">
       {/* Summary */}
-      <div className="bg-linear-to-r from-blue-500 to-purple-600 rounded-lg shadow-md p-6 text-white">
+      <div className="bg-red-500 rounded-lg shadow-md p-6 text-white">
         <h2 className="text-2xl font-bold mb-4">Predictive Models Overview</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>

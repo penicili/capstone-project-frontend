@@ -42,10 +42,10 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading dashboard...</p>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -53,13 +53,13 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center max-w-md">
           <div className="text-red-600 text-5xl mb-4">⚠️</div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
             Error Loading Dashboard
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+          <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={handleRefresh}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -72,16 +72,16 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm">
+      <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-gray-900">
                 Learning Analytics Dashboard
               </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <p className="text-sm text-gray-600 mt-1">
                 Student Performance Metrics & Predictive Models (OULAD)
               </p>
             </div>
@@ -102,13 +102,13 @@ export default function DashboardPage() {
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-4 mt-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex gap-4 mt-6 border-b border-gray-200">
             <button
               onClick={() => setActiveTab('kpi')}
               className={`px-4 py-2 font-medium transition-colors ${
                 activeTab === 'kpi'
                   ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               Student Metrics
@@ -118,7 +118,7 @@ export default function DashboardPage() {
               className={`px-4 py-2 font-medium transition-colors ${
                 activeTab === 'models'
                   ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               Predictive Models
@@ -132,7 +132,7 @@ export default function DashboardPage() {
         {activeTab === 'kpi' && kpiData && (
           <div>
             <div className="mb-6">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-600">
                 Last updated:{' '}
                 {new Date(kpiData.lastUpdated).toLocaleString('id-ID', {
                   year: 'numeric',

@@ -49,18 +49,18 @@ export default function KPICard({ metric }: KPICardProps) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+          <p className="text-sm font-medium text-gray-600 mb-1">
             {title}
           </p>
           <div className="flex items-baseline gap-2">
-            <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h3 className="text-3xl font-bold text-gray-900">
               {formatValue(value)}
             </h3>
             {unit && unit !== 'Rp' && (
-              <span className="text-sm text-gray-500 dark:text-gray-400">{unit}</span>
+              <span className="text-sm text-gray-500">{unit}</span>
             )}
           </div>
         </div>
@@ -72,12 +72,12 @@ export default function KPICard({ metric }: KPICardProps) {
             {getChangeIcon()}
             {Math.abs(change)}%
           </span>
-          <span className="text-sm text-gray-500 dark:text-gray-400">vs last period</span>
+          <span className="text-sm text-gray-500">vs last period</span>
         </div>
       )}
 
       {description && (
-        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        <p className="mt-2 text-xs text-gray-500">
           {description}
         </p>
       )}
