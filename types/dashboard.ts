@@ -4,7 +4,8 @@ export interface KPIMetric {
   title: string;
   value: number | string;
   unit?: string;
-  change?: number; // percentage change
+  target?: number; // target value for comparison
+  change?: number; // percentage change (deprecated, use target instead)
   changeType?: 'increase' | 'decrease' | 'neutral';
   trend?: number[]; // array of historical values for sparkline
   icon?: string;

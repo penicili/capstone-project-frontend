@@ -7,7 +7,7 @@ interface KPICardProps {
 }
 
 export default function KPICard({ metric }: KPICardProps) {
-  const { title, value, unit, change, changeType, description } = metric;
+  const { title, value, unit, target, description } = metric;
 
   const formatValue = (val: number | string) => {
     if (typeof val === 'number' && unit === 'Rp') {
@@ -17,35 +17,46 @@ export default function KPICard({ metric }: KPICardProps) {
         minimumFractionDigits: 0,
       }).format(val);
     }
+    if (typeof val === 'number') {
+      return new Intl.NumberFormat('en-US').format(val);
+    }
     return val;
   };
 
-  const getChangeColor = () => {
-    if (!changeType) return 'text-gray-600';
-    switch (changeType) {
-      case 'increase':
-        return 'text-green-600';
-      case 'decrease':
-        return 'text-red-600';
-      default:
-        return 'text-gray-600';
-    }
+  // Calculate target achievement percentage
+  const getTargetAchievement = () => {
+    if (target === undefined || target === null || typeof value !== 'number') return null;
+    const targetNum = typeof target === 'string' ? parseFloat(target) : target;
+    if (isNaN(targetNum) || targetNum === 0) return null;
+    const percentage = ((value / targetNum) * 100).toFixed(1);
+    const diff = value - targetNum;
+    const isAchieved = value >= targetNum;
+    return { percentage: parseFloat(percentage), diff, isAchieved };
   };
 
-  const getChangeIcon = () => {
-    if (!changeType) return null;
-    if (changeType === 'increase') {
+  const targetData = getTargetAchievement();
+
+  const getAchievementColor = () => {
+    if (!targetData) return 'text-gray-600';
+    if (targetData.isAchieved) return 'text-green-600';
+    if (targetData.percentage >= 80) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  const getAchievementIcon = () => {
+    if (!targetData) return null;
+    if (targetData.isAchieved) {
       return (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       );
     }
     return (
       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
       </svg>
-    );
+      );
   };
 
   return (
@@ -66,13 +77,30 @@ export default function KPICard({ metric }: KPICardProps) {
         </div>
       </div>
 
-      {change !== undefined && (
-        <div className="mt-4 flex items-center gap-1">
-          <span className={`flex items-center text-sm font-medium ${getChangeColor()}`}>
-            {getChangeIcon()}
-            {Math.abs(change)}%
-          </span>
-          <span className="text-sm text-gray-500">vs last period</span>
+      {targetData && (
+        <div className="mt-4">
+          <div className="flex items-center justify-between mb-1">
+            <span className={`flex items-center gap-1 text-sm font-medium ${getAchievementColor()}`}>
+              {getAchievementIcon()}
+              {targetData.percentage}% of target
+            </span>
+            <span className="text-xs text-gray-500">
+              Target: {formatValue(target!)}
+            </span>
+          </div>
+          {/* Progress bar */}
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className={`h-2 rounded-full transition-all ${
+                targetData.isAchieved
+                  ? 'bg-green-500'
+                  : targetData.percentage >= 80
+                  ? 'bg-yellow-500'
+                  : 'bg-red-500'
+              }`}
+              style={{ width: `${Math.min(targetData.percentage, 100)}%` }}
+            />
+          </div>
         </div>
       )}
 
@@ -94,9 +122,28 @@ export default function KPICard({ metric }: KPICardProps) {
 
 // Simple sparkline component
 function MiniSparkline({ data }: { data: number[] }) {
+  if (!data || data.length < 2) return null;
+  
   const max = Math.max(...data);
   const min = Math.min(...data);
   const range = max - min;
+  
+  // Avoid division by zero
+  if (range === 0) {
+    return (
+      <svg className="w-full h-8" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <line
+          x1="0"
+          y1="50"
+          x2="100"
+          y2="50"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="text-red-500"
+        />
+      </svg>
+    );
+  }
 
   const points = data.map((value, index) => {
     const x = (index / (data.length - 1)) * 100;
@@ -112,6 +159,7 @@ function MiniSparkline({ data }: { data: number[] }) {
         stroke="currentColor"
         strokeWidth="2"
         className="text-red-500"
+        vectorEffect="non-scaling-stroke"
       />
     </svg>
   );
