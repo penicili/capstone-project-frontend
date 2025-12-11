@@ -28,7 +28,7 @@ export default function ModelPredictionChart({ model }: ModelPredictionChartProp
   }));
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-red-500">
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-gray-900">
           {model.name}
@@ -68,8 +68,8 @@ export default function ModelPredictionChart({ model }: ModelPredictionChartProp
           <AreaChart data={chartData}>
             <defs>
               <linearGradient id="colorConfidence" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.1} />
-                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                <stop offset="5%" stopColor="#dc2626" stopOpacity={0.15} />
+                <stop offset="95%" stopColor="#dc2626" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
@@ -136,7 +136,7 @@ export default function ModelPredictionChart({ model }: ModelPredictionChartProp
             <Line
               type="monotone"
               dataKey="predicted"
-              stroke="#3b82f6"
+              stroke="#dc2626"
               strokeWidth={2}
               strokeDasharray="5 5"
               dot={{ r: 3 }}
@@ -153,7 +153,7 @@ export default function ModelPredictionChart({ model }: ModelPredictionChartProp
           {model.features.map((feature, index) => (
             <span
               key={index}
-              className="px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full"
+              className="px-3 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full"
             >
               {feature}
             </span>

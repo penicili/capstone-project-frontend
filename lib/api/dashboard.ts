@@ -12,16 +12,11 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/a
  */
 export async function fetchKPIData(): Promise<KPIDashboardData> {
   try {
-    const response = await fetch(`${API_BASE_URL}/kpi/dashboard`, {
+    const response = await fetch(`${API_BASE_URL}/kpi/overview`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
-      // Uncomment jika butuh authentication
-      // headers: {
-      //   'Content-Type': 'application/json',
-      //   'Authorization': `Bearer ${token}`,
-      // },
     });
 
     if (!response.ok) {
@@ -47,7 +42,7 @@ export async function fetchKPIData(): Promise<KPIDashboardData> {
  */
 export async function fetchPredictiveModelData(): Promise<PredictiveModelDashboardData> {
   try {
-    const response = await fetch(`${API_BASE_URL}/models/dashboard`, {
+    const response = await fetch(`${API_BASE_URL}/models/status`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -126,101 +121,110 @@ function getMockKPIData(): KPIDashboardData {
   return {
     categories: [
       {
-        category: 'Student Engagement',
+        category: 'Student Performance',
         metrics: [
           {
             id: 'total-students',
             title: 'Total Students',
-            value: 28785,
+            value: 1000,
+            change: 5.2,
+            changeType: 'increase',
+            trend: [950, 970, 985, 995, 1000],
+            description: 'Total enrolled students',
+          },
+          {
+            id: 'total-pass',
+            title: 'Passed',
+            value: 450,
             change: 8.3,
             changeType: 'increase',
-            trend: [26000, 26500, 27200, 28000, 28785],
-            description: 'Total enrolled students',
+            trend: [400, 415, 430, 440, 450],
+            description: 'Students who passed',
+          },
+          {
+            id: 'total-distinction',
+            title: 'Distinction',
+            value: 100,
+            change: 12.4,
+            changeType: 'increase',
+            trend: [80, 85, 90, 95, 100],
+            description: 'Students with distinction',
+          },
+          {
+            id: 'total-fail',
+            title: 'Failed',
+            value: 200,
+            change: -3.5,
+            changeType: 'increase',
+            trend: [220, 215, 210, 205, 200],
+            description: 'Students who failed',
+          },
+          {
+            id: 'total-withdrawn',
+            title: 'Withdrawn',
+            value: 250,
+            change: -5.7,
+            changeType: 'increase',
+            trend: [280, 270, 265, 255, 250],
+            description: 'Students who withdrew',
+          },
+          {
+            id: 'avg-credits',
+            title: 'Avg Credits',
+            value: 45.5,
+            change: 2.1,
+            changeType: 'increase',
+            trend: [43, 43.5, 44.2, 45, 45.5],
+            description: 'Average studied credits',
+          },
+        ],
+      },
+      {
+        category: 'VLE Engagement',
+        metrics: [
+          {
+            id: 'total-clicks',
+            title: 'Total VLE Clicks',
+            value: 500000,
+            change: 15.2,
+            changeType: 'increase',
+            trend: [420000, 445000, 470000, 485000, 500000],
+            description: 'Total VLE interactions',
+          },
+          {
+            id: 'avg-clicks',
+            title: 'Avg Clicks per Student',
+            value: 500,
+            change: 9.8,
+            changeType: 'increase',
+            trend: [450, 465, 480, 490, 500],
+            description: 'Average clicks per student',
           },
           {
             id: 'active-students',
             title: 'Active Students',
-            value: 24567,
-            change: 5.7,
+            value: 1000,
+            change: 3.1,
             changeType: 'increase',
-            trend: [22000, 22800, 23500, 24000, 24567],
-            description: 'Students with activity in last 7 days',
+            trend: [950, 970, 985, 995, 1000],
+            description: 'Students with VLE activity',
           },
           {
-            id: 'avg-vle-clicks',
-            title: 'Avg VLE Interactions',
-            value: 1847,
-            change: 12.4,
-            changeType: 'increase',
-            trend: [1500, 1600, 1700, 1780, 1847],
-            description: 'Average VLE clicks per student',
-          },
-        ],
-      },
-      {
-        category: 'Student Performance',
-        metrics: [
-          {
-            id: 'pass-rate',
-            title: 'Pass Rate',
-            value: '68.5',
-            unit: '%',
-            change: 3.2,
-            changeType: 'increase',
-            trend: [64, 65, 66.5, 67.8, 68.5],
-            description: 'Students passing assessments',
-          },
-          {
-            id: 'avg-score',
-            title: 'Average Score',
-            value: 72.3,
-            unit: 'pts',
-            change: 2.8,
-            changeType: 'increase',
-            trend: [68, 69.5, 70.8, 71.5, 72.3],
-            description: 'Mean assessment score',
-          },
-          {
-            id: 'completion-rate',
-            title: 'Completion Rate',
-            value: '76.2',
-            unit: '%',
-            change: -1.5,
-            changeType: 'decrease',
-            trend: [79, 78.5, 77.8, 77, 76.2],
-            description: 'Students completing courses',
-          },
-        ],
-      },
-      {
-        category: 'Course Analytics',
-        metrics: [
-          {
-            id: 'total-courses',
-            title: 'Active Courses',
-            value: 22,
+            id: 'min-clicks',
+            title: 'Min Clicks',
+            value: 10,
             change: 0,
             changeType: 'neutral',
-            description: 'Currently running courses',
+            description: 'Minimum clicks by a student',
           },
           {
-            id: 'avg-course-engagement',
-            title: 'Avg Engagement Rate',
-            value: '82.4',
-            unit: '%',
-            change: 4.1,
+            id: 'max-clicks',
+            title: 'Max Clicks',
+            value: 5000,
+            change: 25.0,
             changeType: 'increase',
-            trend: [76, 78, 79.5, 81, 82.4],
-            description: 'Average student engagement per course',
-          },
-          {
-            id: 'at-risk-students',
-            title: 'At-Risk Students',
-            value: 3842,
-            change: -8.2,
-            changeType: 'increase',
-            trend: [4500, 4300, 4100, 3950, 3842],
-            description: 'Students predicted to fail/withdraw',
+            trend: [3800, 4200, 4500, 4750, 5000],
+            description: 'Maximum clicks by a student',
           },
         ],
       },
@@ -232,50 +236,34 @@ function getMockKPIData(): KPIDashboardData {
 function getMockPredictiveModelData(): PredictiveModelDashboardData {
   const today = new Date();
   
-  // Student Pass/Fail predictions (percentage of students predicted to pass)
-  const passPredictions = Array.from({ length: 30 }, (_, i) => {
+  // Final Result predictions (Pass/Fail/Distinction/Withdrawn)
+  const finalResultPredictions = Array.from({ length: 30 }, (_, i) => {
     const date = new Date(today);
-    date.setDate(date.getDate() + i);
-    const baseValue = 68 + Math.random() * 8; // 68-76% pass rate
+    date.setDate(date.getDate() - 15 + i);
+    const baseValue = 65 + Math.random() * 15; // 65-80% accuracy
     return {
       date: date.toISOString().split('T')[0],
-      actual: i < 15 ? 68 + Math.random() * 10 : undefined,
+      actual: i < 15 ? 60 + Math.random() * 25 : undefined,
       predicted: baseValue,
       confidence: {
-        lower: baseValue - 5,
-        upper: baseValue + 5,
+        lower: baseValue - 10,
+        upper: baseValue + 10,
       },
     };
   });
 
-  // Student withdrawal predictions (number of students at risk)
-  const withdrawalPredictions = Array.from({ length: 30 }, (_, i) => {
+  // Dropout predictions
+  const dropoutPredictions = Array.from({ length: 30 }, (_, i) => {
     const date = new Date(today);
-    date.setDate(date.getDate() + i);
-    const baseValue = 150 + Math.random() * 50; // 150-200 students
+    date.setDate(date.getDate() - 15 + i);
+    const baseValue = 70 + Math.random() * 15; // 70-85% accuracy
     return {
       date: date.toISOString().split('T')[0],
-      actual: i < 15 ? 145 + Math.random() * 60 : undefined,
+      actual: i < 15 ? 65 + Math.random() * 25 : undefined,
       predicted: baseValue,
       confidence: {
-        lower: baseValue * 0.8,
-        upper: baseValue * 1.2,
-      },
-    };
-  });
-
-  // Assessment score predictions
-  const scorePredictions = Array.from({ length: 30 }, (_, i) => {
-    const date = new Date(today);
-    date.setDate(date.getDate() + i);
-    const baseValue = 70 + Math.random() * 15; // 70-85 points
-    return {
-      date: date.toISOString().split('T')[0],
-      actual: i < 15 ? 68 + Math.random() * 18 : undefined,
-      predicted: baseValue,
-      confidence: {
-        lower: baseValue - 8,
-        upper: baseValue + 8,
+        lower: baseValue - 12,
+        upper: baseValue + 12,
       },
     };
   });
@@ -283,57 +271,41 @@ function getMockPredictiveModelData(): PredictiveModelDashboardData {
   return {
     models: [
       {
-        id: 'student-performance',
-        name: 'Student Performance Prediction',
-        description: 'Predicts student pass/fail outcomes based on VLE engagement and assessment history',
-        modelType: 'XGBoost Classifier',
-        predictions: passPredictions,
+        id: 'final-result',
+        name: 'Final Result Prediction',
+        description: 'Predicts student final result (Pass/Fail/Distinction/Withdrawn) based on 6 key features',
+        modelType: 'Machine Learning Classifier',
+        predictions: finalResultPredictions,
         metrics: {
-          accuracy: 89.7,
-          mae: 0.082,
-          rmse: 0.124,
-          r2Score: 0.86,
+          accuracy: 75.5,
+          mae: 0.15,
+          rmse: 0.22,
+          r2Score: 0.78,
         },
-        features: ['VLE Clicks', 'Assessment Scores', 'Submission Time', 'Demographics', 'Previous Course History'],
+        features: ['Gender', 'Age Band', 'Studied Credits', 'Previous Attempts', 'Total VLE Clicks', 'Avg Assessment Score'],
         lastTrained: new Date(Date.now() - 86400000 * 2).toISOString(),
         nextUpdate: new Date(Date.now() + 86400000 * 5).toISOString(),
       },
       {
-        id: 'withdrawal-prediction',
-        name: 'Student Withdrawal Prediction',
-        description: 'Identifies students at high risk of course withdrawal or dropout',
-        modelType: 'Random Forest Classifier',
-        predictions: withdrawalPredictions,
+        id: 'dropout',
+        name: 'Student Dropout Prediction',
+        description: 'Predicts whether a student will dropout based on engagement and performance metrics',
+        modelType: 'Machine Learning Classifier',
+        predictions: dropoutPredictions,
         metrics: {
-          accuracy: 87.3,
-          mae: 18.5,
-          rmse: 24.7,
-          r2Score: 0.82,
+          accuracy: 78.3,
+          mae: 0.18,
+          rmse: 0.25,
+          r2Score: 0.75,
         },
-        features: ['VLE Activity Decline', 'Assessment Submission Rate', 'Forum Participation', 'Login Frequency', 'Early Assessment Scores'],
+        features: ['Gender', 'Age Band', 'Studied Credits', 'Previous Attempts', 'Total VLE Clicks', 'Avg Assessment Score'],
         lastTrained: new Date(Date.now() - 86400000 * 3).toISOString(),
         nextUpdate: new Date(Date.now() + 86400000 * 4).toISOString(),
       },
-      {
-        id: 'assessment-score',
-        name: 'Assessment Score Prediction',
-        description: 'Predicts final assessment scores based on continuous assessment and VLE engagement',
-        modelType: 'Neural Network (MLP)',
-        predictions: scorePredictions,
-        metrics: {
-          accuracy: 91.4,
-          mae: 6.8,
-          rmse: 9.2,
-          r2Score: 0.88,
-        },
-        features: ['Cumulative Assessment Score', 'VLE Engagement Level', 'Resource Access Pattern', 'Time Spent on Materials', 'Peer Interaction'],
-        lastTrained: new Date(Date.now() - 86400000 * 1).toISOString(),
-        nextUpdate: new Date(Date.now() + 86400000 * 6).toISOString(),
-      },
     ],
     summary: {
-      totalModels: 3,
-      averageAccuracy: 89.47,
+      totalModels: 2,
+      averageAccuracy: 76.9,
       lastUpdated: new Date().toISOString(),
     },
   };

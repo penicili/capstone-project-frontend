@@ -49,7 +49,7 @@ export default function KPICard({ metric }: KPICardProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-all border-l-4 border-red-500 hover:border-red-600">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <p className="text-sm font-medium text-gray-600 mb-1">
@@ -111,7 +111,7 @@ function MiniSparkline({ data }: { data: number[] }) {
         fill="none"
         stroke="currentColor"
         strokeWidth="2"
-        className="text-blue-500"
+        className="text-red-500"
       />
     </svg>
   );

@@ -21,7 +21,7 @@ export default function ModelMetricsCard({ metrics, modelName }: ModelMetricsCar
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-red-400">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">
         {modelName} - Performance Metrics
       </h3>
@@ -50,11 +50,11 @@ export default function ModelMetricsCard({ metrics, modelName }: ModelMetricsCar
         </div>
 
         {/* R² Score */}
-        <div className="bg-blue-100 rounded-lg p-4">
+        <div className="bg-red-100 rounded-lg p-4">
           <p className="text-xs font-medium text-gray-600 mb-1">
             R² Score
           </p>
-          <p className="text-3xl font-bold text-blue-600">
+          <p className="text-3xl font-bold text-red-600">
             {metrics.r2Score.toFixed(3)}
           </p>
           <p className="text-xs text-gray-600 mt-1">
@@ -63,11 +63,11 @@ export default function ModelMetricsCard({ metrics, modelName }: ModelMetricsCar
         </div>
 
         {/* MAE */}
-        <div className="bg-purple-100 rounded-lg p-4">
+        <div className="bg-red-50 rounded-lg p-4">
           <p className="text-xs font-medium text-gray-600 mb-1">
             MAE
           </p>
-          <p className="text-2xl font-bold text-purple-600">
+          <p className="text-2xl font-bold text-red-700">
             {metrics.mae >= 1000
               ? `${(metrics.mae / 1000).toFixed(1)}K`
               : metrics.mae.toFixed(2)}

@@ -1,68 +1,176 @@
-import Link from "next/link";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { fetchKPIData, fetchPredictiveModelData } from '@/lib/api/dashboard';
+import { KPIDashboardData, PredictiveModelDashboardData } from '@/types/dashboard';
+import KPISection from '@/components/dashboard/KPISection';
+import PredictiveModelsSection from '@/components/dashboard/PredictiveModelsSection';
+import PredictionForm from '@/components/dashboard/PredictionForm';
 
 export default function Home() {
+  const [kpiData, setKpiData] = useState<KPIDashboardData | null>(null);
+  const [modelData, setModelData] = useState<PredictiveModelDashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'kpi' | 'models' | 'predict'>('kpi');
+
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  const loadDashboardData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const [kpi, models] = await Promise.all([
+        fetchKPIData(),
+        fetchPredictiveModelData(),
+      ]);
+
+      setKpiData(kpi);
+      setModelData(models);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRefresh = () => {
+    loadDashboardData();
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-red-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-red-50 flex items-center justify-center">
+        <div className="text-center bg-white p-8 rounded-lg shadow-md">
+          <div className="text-red-600 text-5xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Dashboard</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button
+            onClick={handleRefresh}
+            className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <main className="flex flex-col items-center justify-center px-8 py-16 max-w-4xl">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Learning Analytics Dashboard
-          </h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Monitor student performance and view predictive insights using OULAD dataset
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
-          {/* KPI Card */}
-          <Link 
-            href="/dashboard"
-            className="group bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-all hover:scale-105"
-          >
-            <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-4 mx-auto">
-              <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+    <div className="min-h-screen bg-red-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="mb-8 bg-white rounded-lg shadow-md p-6 border-b-4 border-red-600">
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Learning Analytics Dashboard</h1>
+              <p className="text-gray-600 mt-1">
+                Monitor student performance and view predictive insights using OULAD dataset
+              </p>
+            </div>
+            <button
+              onClick={handleRefresh}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
-            </div>
-            <h2 className="text-2xl font-semibold text-gray-900 text-center mb-2">
-              KPI Metrics
-            </h2>
-            <p className="text-gray-600 text-center">
-              View student engagement, performance, and course analytics
-            </p>
-            <div className="mt-4 text-center text-blue-600 group-hover:text-blue-700 font-medium">
-              View Dashboard →
-            </div>
-          </Link>
+              Refresh
+            </button>
+          </div>
 
-          {/* Predictive Models Card */}
-          <Link 
-            href="/dashboard"
-            className="group bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-all hover:scale-105"
-          >
-            <div className="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-lg mb-4 mx-auto">
-              <svg className="w-8 h-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-semibold text-gray-900 text-center mb-2">
-              Predictive Models
-            </h2>
-            <p className="text-gray-600 text-center">
-              AI-powered predictions for student performance and at-risk identification
-            </p>
-            <div className="mt-4 text-center text-purple-600 group-hover:text-purple-700 font-medium">
-              View Models →
-            </div>
-          </Link>
+          {/* Tab Navigation */}
+          <div className="flex gap-4 border-b border-gray-200">
+            <button
+              onClick={() => setActiveTab('kpi')}
+              className={`px-4 py-2 font-medium transition-colors border-b-2 ${
+                activeTab === 'kpi'
+                  ? 'border-red-600 text-red-600'
+                  : 'border-transparent text-gray-600 hover:text-red-600'
+              }`}
+            >
+              Student Metrics
+            </button>
+            <button
+              onClick={() => setActiveTab('models')}
+              className={`px-4 py-2 font-medium transition-colors border-b-2 ${
+                activeTab === 'models'
+                  ? 'border-red-600 text-red-600'
+                  : 'border-transparent text-gray-600 hover:text-red-600'
+              }`}
+            >
+              Model Status
+            </button>
+            <button
+              onClick={() => setActiveTab('predict')}
+              className={`px-4 py-2 font-medium transition-colors border-b-2 ${
+                activeTab === 'predict'
+                  ? 'border-red-600 text-red-600'
+                  : 'border-transparent text-gray-600 hover:text-red-600'
+              }`}
+            >
+              Make Prediction
+            </button>
+          </div>
         </div>
 
-        <div className="mt-12 text-center">
-          <p className="text-sm text-gray-500">
-            Powered by Next.js 16 & TypeScript
-          </p>
+        {/* Content */}
+        <div className="space-y-8">
+          {activeTab === 'kpi' && kpiData && (
+            <div>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Key Performance Indicators</h2>
+                <p className="text-gray-600">
+                  Last updated: {new Date(kpiData.lastUpdated).toLocaleString()}
+                </p>
+              </div>
+              <div className="space-y-8">
+                {kpiData.categories.map((category) => (
+                  <KPISection key={category.category} category={category} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'models' && modelData && (
+            <div>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Predictive Models</h2>
+                <p className="text-gray-600">
+                  Last updated: {new Date(modelData.summary.lastUpdated).toLocaleString()}
+                </p>
+              </div>
+              <PredictiveModelsSection data={modelData} />
+            </div>
+          )}
+
+          {activeTab === 'predict' && (
+            <div>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Make a Prediction</h2>
+                <p className="text-gray-600">
+                  Enter student information to predict their final result or dropout risk
+                </p>
+              </div>
+              <PredictionForm />
+            </div>
+          )}
         </div>
-      </main>
+      </div>
     </div>
   );
 }
