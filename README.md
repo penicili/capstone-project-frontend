@@ -2,23 +2,8 @@
 
 Dashboard Next.js untuk monitoring student performance dan predictive analytics menggunakan Open University Learning Analytics Dataset (OULAD) dengan TypeScript.
 
-## 🚀 Features
 
-- **Student Metrics Dashboard**: Monitoring real-time untuk student engagement, performance, dan course analytics
-- **Predictive Models**: Visualisasi prediksi student performance, withdrawal risk, dan assessment scores
-- **OULAD Dataset**: Menggunakan Open University Learning Analytics Dataset
-- **Responsive Design**: UI yang responsif dengan Tailwind CSS
-- **Mock Data**: Data dummy berdasarkan OULAD untuk development sebelum backend siap
-- **API Integration**: Struktur API yang siap untuk integrasi dengan backend
-
-## 📦 Tech Stack
-
-- **Next.js 16** - React framework dengan App Router
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first CSS framework
-- **Recharts** - Library untuk visualisasi chart dan grafik
-
-## 🛠️ Installation & Getting Started
+## Getting Started
 
 ```bash
 # Install dependencies
@@ -28,28 +13,32 @@ npm install
 npm run dev
 ```
 
-Buka [http://localhost:3000](http://localhost:3000) di browser untuk melihat landing page, dan klik untuk masuk ke dashboard di [http://localhost:3000/dashboard](http://localhost:3000/dashboard).
+Buka [http://localhost:3000](http://localhost:3000) di browser untuk melihat dashboard.
 
 ## 📁 Project Structure
 
 ```
 capstone-project-frontend/
 ├── app/
-│   ├── dashboard/
-│   │   └── page.tsx          # Main dashboard page
 │   ├── layout.tsx             # Root layout
-│   ├── page.tsx               # Home page
+│   ├── page.tsx               # Main dashboard page (root)
 │   └── globals.css            # Global styles
 ├── components/
 │   └── dashboard/
-│       ├── KPICard.tsx        # KPI metric card component
-│       ├── KPISection.tsx     # KPI section dengan kategori
-│       ├── ModelPredictionChart.tsx  # Chart untuk prediksi
-│       ├── ModelMetricsCard.tsx      # Card untuk model metrics
-│       └── PredictiveModelsSection.tsx # Section untuk semua models
+│       ├── KPICard.tsx                  # KPI metric card component
+│       ├── KPISection.tsx               # KPI section dengan kategori
+│       ├── PredictionForm.tsx           # Form untuk prediksi student
+│       ├── ModelPredictionChart.tsx     # Chart untuk prediksi (tidak digunakan)
+│       ├── ModelMetricsCard.tsx         # Card untuk model metrics (tidak digunakan)
+│       └── PredictiveModelsSection.tsx  # Section untuk semua models (tidak digunakan)
 ├── lib/
 │   └── api/
-│       └── dashboard.ts       # API functions untuk fetch data
+│       ├── index.ts           # Central API export
+│       ├── config.ts          # API configuration
+│       ├── kpi.ts             # KPI-related APIs
+│       ├── models.ts          # ML model APIs
+│       ├── predictions.ts     # Prediction APIs
+│       └── dashboard.ts       # [DEPRECATED] Old API file
 ├── types/
 │   └── dashboard.ts           # TypeScript types dan interfaces
 └── .env.local                 # Environment variables
@@ -67,12 +56,19 @@ NEXT_PUBLIC_API_URL=http://localhost:8000/api
 
 ### API Endpoints
 
-API service sudah disiapkan di `lib/api/dashboard.ts` dengan endpoints:
+API service sudah disiapkan di `lib/api/` dengan struktur modular:
 
-1. **GET `/api/kpi/dashboard`** - Fetch KPI dashboard data
-2. **GET `/api/models/dashboard`** - Fetch predictive model data
-3. **GET `/api/models/:id/predictions`** - Fetch specific model predictions
-4. **POST `/api/models/:id/retrain`** - Retrain specific model
+**KPI APIs (`lib/api/kpi.ts`):**
+- **GET `/api/kpi/overview`** - Fetch KPI dashboard data
+
+**Prediction APIs (`lib/api/predictions.ts`):**
+- **POST `/api/predict/final-result`** - Predict student final result
+- **POST `/api/predict/dropout`** - Predict student dropout risk
+
+**Model APIs (`lib/api/models.ts`):**
+- **GET `/api/models/status`** - Fetch model status
+- **GET `/api/models/:id/predictions`** - Fetch specific model predictions
+- **POST `/api/models/:id/retrain`** - Retrain specific model
 
 ### Response Format
 
@@ -87,80 +83,88 @@ Semua API endpoint mengharapkan response format:
 }
 ```
 
-## 📊 Student Metrics (KPIs)
+## 📊 Dashboard Features
 
-Dashboard menampilkan metrics dalam 3 kategori:
+### Tab 1: Student Metrics (KPIs)
 
-1. **Student Engagement**
+Dashboard menampilkan metrics dalam 2 kategori:
+
+1. **Student Performance**
    - Total Students
+   - Passed
+   - Distinction
+   - Failed
+   - Withdrawn
+   - Average Credits
+
+2. **VLE Engagement**
+   - Total VLE Clicks
+   - Average Clicks per Student
    - Active Students
-   - Average VLE Interactions
+   - Min Clicks
+   - Max Clicks
 
-2. **Student Performance**
-   - Pass Rate
-   - Average Score
-   - Completion Rate
+### Tab 2: Make Prediction
 
-3. **Course Analytics**
-   - Active Courses
-   - Average Engagement Rate
-   - At-Risk Students
+Form interaktif untuk memprediksi student outcomes dengan 6 features:
+- Gender (F/M)
+- Age Band (0-35, 35-55, 55<=)
+- Studied Credits
+- Previous Attempts
+- Total VLE Clicks
+- Average Assessment Score (0-100)
 
-## 🤖 Predictive Models
+Dua model prediksi tersedia:
+1. **Final Result Prediction** - Prediksi hasil akhir mahasiswa (Pass/Fail/Distinction/Withdrawn)
+2. **Dropout Prediction** - Prediksi risiko dropout mahasiswa
 
-Dashboard menampilkan 3 jenis model berdasarkan OULAD:
+## 🎨 Tech Stack
 
-1. **Student Performance Prediction** - Prediksi pass/fail outcomes berdasarkan VLE engagement dan assessment history
-2. **Student Withdrawal Prediction** - Identifikasi students berisiko dropout/withdrawal
-3. **Assessment Score Prediction** - Prediksi final assessment scores berdasarkan continuous assessment
+- **Framework**: Next.js 16 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **Charts**: Recharts (untuk future features)
+- **UI Theme**: Red & White color scheme
+- **API**: RESTful with FastAPI backend
 
-Setiap model menampilkan:
-- Chart dengan actual vs predicted values
-- Confidence intervals
-- Performance metrics (Accuracy, R², MAE, RMSE)
-- Features dari OULAD yang digunakan (VLE clicks, assessment scores, demographics, etc.)
-- Last trained timestamp
+## 🔧 API Usage Examples
 
-## 🎨 Customization
-
-### Menambah KPI Baru
-
-Edit `lib/api/dashboard.ts` di function `getMockKPIData()` atau fetch dari backend:
+### Import API Functions
 
 ```typescript
-{
-  id: 'unique-id',
-  title: 'Your Metric',
-  value: 1234,
-  unit: 'Rp',
-  change: 5.2,
-  changeType: 'increase',
-  description: 'Description'
-}
+// Import dari central API
+import { fetchKPIData, predictFinalResult, predictDropout } from '@/lib/api';
+import type { PredictionRequest, PredictionResponse } from '@/types/dashboard';
 ```
 
-### Menambah Model Baru
-
-Edit `lib/api/dashboard.ts` di function `getMockPredictiveModelData()`:
+### Fetch KPI Data
 
 ```typescript
-{
-  id: 'model-id',
-  name: 'Your Model',
-  description: 'Model description',
-  modelType: 'Algorithm name',
-  predictions: [...],
-  metrics: {...},
-  features: [...],
-  lastTrained: '...',
-}
+const kpiData = await fetchKPIData();
+```
+
+### Make Prediction
+
+```typescript
+const request: PredictionRequest = {
+  gender: 'F',
+  age_band: '0-35',
+  studied_credits: 60,
+  num_of_prev_attempts: 0,
+  total_clicks: 1000,
+  avg_assessment_score: 75.5,
+};
+
+const result = await predictFinalResult(request);
+console.log(result.prediction); // "Pass", "Fail", "Distinction", or "Withdrawn"
 ```
 
 ## 🔄 Development Notes
 
-- Saat ini menggunakan **mock data** untuk development
-- API calls akan fallback ke mock data jika backend belum tersedia
-- Untuk production, pastikan backend endpoint sudah siap dan update `NEXT_PUBLIC_API_URL`
+- API terhubung langsung ke backend FastAPI di `http://localhost:8000/api`
+- Error handling otomatis dengan fallback yang informatif
+- CORS harus dikonfigurasi di backend untuk mengizinkan request dari `http://localhost:3000`
+- Untuk production, update `NEXT_PUBLIC_API_URL` di `.env.local`
 
 ## 🚀 Deployment
 
@@ -172,23 +176,13 @@ npm run build
 npm start
 ```
 
-## 📝 TODO
+## 📝 Notes
 
-- [ ] Implementasi authentication
-- [ ] Add loading skeletons
-- [ ] Add error boundaries
-- [ ] Implement real-time updates dengan WebSocket
-- [ ] Add export functionality (PDF/Excel)
-- [ ] Add filtering dan date range selector
-- [ ] Implement model retraining functionality
+### Completed Features
+- ✅ KPI dashboard dengan data dari backend
+- ✅ Interactive prediction form dengan 2 models
+- ✅ Red & white theme design
+- ✅ Modular API structure
+- ✅ Type-safe TypeScript implementation
+- ✅ Responsive design
 
-## 📚 Learn More
-
-To learn more about Next.js:
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Learn Next.js](https://nextjs.org/learn)
-
-## 📄 License
-
-MIT License
