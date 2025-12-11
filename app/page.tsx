@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { fetchKPIData } from '@/lib/api/dashboard';
+import { fetchKPIData } from '@/lib/api';
 import { KPIDashboardData } from '@/types/dashboard';
 import KPISection from '@/components/dashboard/KPISection';
 import PredictionForm from '@/components/dashboard/PredictionForm';

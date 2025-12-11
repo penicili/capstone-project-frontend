@@ -1,23 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-
-interface FinalResultRequest {
-  gender: 'F' | 'M';
-  age_band: '0-35' | '35-55' | '55<=';
-  studied_credits: number;
-  num_of_prev_attempts: number;
-  total_clicks: number;
-  avg_assessment_score: number;
-}
-
-interface PredictionResponse {
-  success: boolean;
-  prediction: string;
-  message?: string;
-}
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+import { predictFinalResult, predictDropout } from '@/lib/api';
+import type { PredictionRequest, PredictionResponse } from '@/types/dashboard';
 
 export default function PredictionForm() {
   const [activeModel, setActiveModel] = useState<'final-result' | 'dropout'>('final-result');
@@ -25,7 +10,7 @@ export default function PredictionForm() {
   const [result, setResult] = useState<PredictionResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState<FinalResultRequest>({
+  const [formData, setFormData] = useState<PredictionRequest>({
     gender: 'F',
     age_band: '0-35',
     studied_credits: 60,
@@ -41,23 +26,9 @@ export default function PredictionForm() {
     setResult(null);
 
     try {
-      const endpoint = activeModel === 'final-result' 
-        ? '/predict/final-result'
-        : '/predict/dropout';
-
-      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Prediction failed');
-      }
+      const data = activeModel === 'final-result'
+        ? await predictFinalResult(formData)
+        : await predictDropout(formData);
 
       setResult(data);
     } catch (err) {
@@ -69,7 +40,7 @@ export default function PredictionForm() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev: PredictionRequest) => ({
       ...prev,
       [name]: ['studied_credits', 'num_of_prev_attempts', 'total_clicks', 'avg_assessment_score'].includes(name)
         ? Number(value)

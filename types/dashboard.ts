@@ -67,3 +67,19 @@ export interface ApiResponse<T> {
   message?: string;
   error?: string;
 }
+
+// Prediction Request/Response Types
+export interface PredictionRequest {
+  gender: 'F' | 'M';
+  age_band: '0-35' | '35-55' | '55<=';
+  studied_credits: number;
+  num_of_prev_attempts: number;
+  total_clicks: number;
+  avg_assessment_score: number;
+}
+
+export interface PredictionResponse {
+  success: boolean;
+  prediction: string;
+  message?: string;
+}
