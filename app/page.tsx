@@ -1,18 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { fetchKPIData, fetchPredictiveModelData } from '@/lib/api/dashboard';
-import { KPIDashboardData, PredictiveModelDashboardData } from '@/types/dashboard';
+import { fetchKPIData } from '@/lib/api/dashboard';
+import { KPIDashboardData } from '@/types/dashboard';
 import KPISection from '@/components/dashboard/KPISection';
-import PredictiveModelsSection from '@/components/dashboard/PredictiveModelsSection';
 import PredictionForm from '@/components/dashboard/PredictionForm';
 
 export default function Home() {
   const [kpiData, setKpiData] = useState<KPIDashboardData | null>(null);
-  const [modelData, setModelData] = useState<PredictiveModelDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'kpi' | 'models' | 'predict'>('kpi');
+  const [activeTab, setActiveTab] = useState<'kpi' | 'predict'>('kpi');
 
   useEffect(() => {
     loadDashboardData();
@@ -23,13 +21,9 @@ export default function Home() {
       setLoading(true);
       setError(null);
 
-      const [kpi, models] = await Promise.all([
-        fetchKPIData(),
-        fetchPredictiveModelData(),
-      ]);
+      const kpi = await fetchKPIData();
 
       setKpiData(kpi);
-      setModelData(models);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
     } finally {
@@ -106,16 +100,6 @@ export default function Home() {
               Student Metrics
             </button>
             <button
-              onClick={() => setActiveTab('models')}
-              className={`px-4 py-2 font-medium transition-colors border-b-2 ${
-                activeTab === 'models'
-                  ? 'border-red-600 text-red-600'
-                  : 'border-transparent text-gray-600 hover:text-red-600'
-              }`}
-            >
-              Model Status
-            </button>
-            <button
               onClick={() => setActiveTab('predict')}
               className={`px-4 py-2 font-medium transition-colors border-b-2 ${
                 activeTab === 'predict'
@@ -123,7 +107,7 @@ export default function Home() {
                   : 'border-transparent text-gray-600 hover:text-red-600'
               }`}
             >
-              Make Prediction
+              Prediction Model
             </button>
           </div>
         </div>
@@ -146,22 +130,10 @@ export default function Home() {
             </div>
           )}
 
-          {activeTab === 'models' && modelData && (
-            <div>
-              <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Predictive Models</h2>
-                <p className="text-gray-600">
-                  Last updated: {new Date(modelData.summary.lastUpdated).toLocaleString()}
-                </p>
-              </div>
-              <PredictiveModelsSection data={modelData} />
-            </div>
-          )}
-
           {activeTab === 'predict' && (
             <div>
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Make a Prediction</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Prediction Model</h2>
                 <p className="text-gray-600">
                   Enter student information to predict their final result or dropout risk
                 </p>

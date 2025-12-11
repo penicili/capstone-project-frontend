@@ -42,8 +42,8 @@ export default function PredictionForm() {
 
     try {
       const endpoint = activeModel === 'final-result' 
-        ? '/api/predict/final-result'
-        : '/api/predict/dropout';
+        ? '/predict/final-result'
+        : '/predict/dropout';
 
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
@@ -79,7 +79,7 @@ export default function PredictionForm() {
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 border-t-4 border-red-500">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Make a Prediction</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">Enter Student Data</h2>
 
       {/* Model Selection */}
       <div className="flex gap-4 mb-6">
@@ -151,7 +151,7 @@ export default function PredictionForm() {
               value={formData.studied_credits}
               onChange={handleInputChange}
               min="0"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
             />
           </div>
 
@@ -166,7 +166,7 @@ export default function PredictionForm() {
               value={formData.num_of_prev_attempts}
               onChange={handleInputChange}
               min="0"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
             />
           </div>
 
@@ -181,7 +181,7 @@ export default function PredictionForm() {
               value={formData.total_clicks}
               onChange={handleInputChange}
               min="0"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
             />
           </div>
 
@@ -198,7 +198,7 @@ export default function PredictionForm() {
               min="0"
               max="100"
               step="0.1"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
             />
           </div>
         </div>
