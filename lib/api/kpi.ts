@@ -24,6 +24,7 @@ const KPI_TARGETS: Record<string, number> = {
   'Grade Performance Index': 70,
   'Low Activity Alert Index': 15, // lower is better
   'Predicted Dropout Risk': 20, // lower is better
+  'Attendance Consistency Score': 85,
 };
 
 /**
