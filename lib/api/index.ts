@@ -9,7 +9,12 @@ export { fetchKPIData } from './kpi';
 export { fetchModelStatus, fetchModelPredictions, retrainModel } from './models';
 
 // Prediction APIs
-export { predictFinalResult, predictDropout } from './predictions';
+export { 
+  predictFinalResult, 
+  predictDropout, 
+  predictFinalResultById, 
+  predictDropoutById 
+} from './predictions';
 
 // Configuration
 export { API_BASE_URL, API_HEADERS, APIError } from './config';

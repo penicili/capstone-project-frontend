@@ -1,14 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { predictFinalResult, predictDropout } from '@/lib/api';
+import { predictFinalResult, predictDropout, predictFinalResultById, predictDropoutById } from '@/lib/api';
 import type { PredictionRequest, PredictionResponse } from '@/types/dashboard';
 
 export default function PredictionForm() {
   const [activeModel, setActiveModel] = useState<'final-result' | 'dropout'>('final-result');
+  const [inputMode, setInputMode] = useState<'manual' | 'id'>('manual');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<PredictionResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [studentId, setStudentId] = useState<number>(1);
 
   const [formData, setFormData] = useState<PredictionRequest>({
     gender: 'F',
@@ -26,9 +28,27 @@ export default function PredictionForm() {
     setResult(null);
 
     try {
-      const data = activeModel === 'final-result'
-        ? await predictFinalResult(formData)
-        : await predictDropout(formData);
+      let data: PredictionResponse;
+      
+      if (inputMode === 'manual') {
+        // Convert empty strings to 0 before submitting
+        const cleanedFormData = {
+          ...formData,
+          studied_credits: Number(formData.studied_credits) || 0,
+          num_of_prev_attempts: Number(formData.num_of_prev_attempts) || 0,
+          total_clicks: Number(formData.total_clicks) || 0,
+          avg_assessment_score: Number(formData.avg_assessment_score) || 0,
+        };
+        
+        data = activeModel === 'final-result'
+          ? await predictFinalResult(cleanedFormData)
+          : await predictDropout(cleanedFormData);
+      } else {
+        const cleanedStudentId = Number(studentId) || 1;
+        data = activeModel === 'final-result'
+          ? await predictFinalResultById(cleanedStudentId)
+          : await predictDropoutById(cleanedStudentId);
+      }
 
       setResult(data);
     } catch (err) {
@@ -43,7 +63,7 @@ export default function PredictionForm() {
     setFormData((prev: PredictionRequest) => ({
       ...prev,
       [name]: ['studied_credits', 'num_of_prev_attempts', 'total_clicks', 'avg_assessment_score'].includes(name)
-        ? Number(value)
+        ? (value === '' ? '' : Number(value))
         : value,
     }));
   };
@@ -76,8 +96,59 @@ export default function PredictionForm() {
         </button>
       </div>
 
+      {/* Input Mode Selection */}
+      <div className="flex gap-4 mb-6">
+        <button
+          type="button"
+          onClick={() => {
+            setInputMode('manual');
+            setError(null);
+            setResult(null);
+          }}
+          className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+            inputMode === 'manual'
+              ? 'bg-red-300 text-red-600 shadow-md'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          Manual Input
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setInputMode('id');
+            setError(null);
+            setResult(null);
+          }}
+          className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+            inputMode === 'id'
+              ? 'bg-red-300 text-red-600 shadow-md'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          By Student ID
+        </button>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {inputMode === 'id' ? (
+          /* Student ID Input */
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Student ID
+            </label>
+            <input
+              type="number"
+              value={studentId || ''}
+              onChange={(e) => setStudentId(e.target.value === '' ? 0 : Number(e.target.value))}
+              min="1"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+              placeholder="Enter student ID"
+            />
+          </div>
+        ) : (
+          /* Manual Input Form */
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Gender */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -119,7 +190,7 @@ export default function PredictionForm() {
             <input
               type="number"
               name="studied_credits"
-              value={formData.studied_credits}
+              value={formData.studied_credits || ''}
               onChange={handleInputChange}
               min="0"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
@@ -134,7 +205,7 @@ export default function PredictionForm() {
             <input
               type="number"
               name="num_of_prev_attempts"
-              value={formData.num_of_prev_attempts}
+              value={formData.num_of_prev_attempts || ''}
               onChange={handleInputChange}
               min="0"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
@@ -149,7 +220,7 @@ export default function PredictionForm() {
             <input
               type="number"
               name="total_clicks"
-              value={formData.total_clicks}
+              value={formData.total_clicks || ''}
               onChange={handleInputChange}
               min="0"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
@@ -164,7 +235,7 @@ export default function PredictionForm() {
             <input
               type="number"
               name="avg_assessment_score"
-              value={formData.avg_assessment_score}
+              value={formData.avg_assessment_score || ''}
               onChange={handleInputChange}
               min="0"
               max="100"
@@ -172,7 +243,8 @@ export default function PredictionForm() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
             />
           </div>
-        </div>
+          </div>
+        )}
 
         {/* Submit Button */}
         <button
@@ -185,15 +257,52 @@ export default function PredictionForm() {
       </form>
 
       {/* Result Display */}
-      {result && (
-        <div className="mt-6 p-4 bg-green-50 border-l-4 border-green-500 rounded">
-          <h3 className="font-semibold text-green-900 mb-2">Prediction Result:</h3>
-          <p className="text-2xl font-bold text-green-700">{result.prediction}</p>
-          {result.message && (
-            <p className="text-sm text-green-600 mt-2">{result.message}</p>
-          )}
-        </div>
-      )}
+      {result && (() => {
+        // Format prediction text
+        let displayText = result.prediction;
+        let isNegative = false;
+        
+        if (activeModel === 'dropout') {
+          // Convert 0/1 to readable text
+          if (result.prediction === '1' || result.prediction.toLowerCase() === 'true') {
+            displayText = 'At Risk';
+            isNegative = true;
+          } else if (result.prediction === '0' || result.prediction.toLowerCase() === 'false') {
+            displayText = 'No Risk';
+            isNegative = false;
+          }
+        } else {
+          // Final result - check if fail or withdrawn
+          const predictionLower = result.prediction.toLowerCase();
+          isNegative = predictionLower === 'fail' || predictionLower === 'withdrawn';
+        }
+        
+        return (
+          <div className={`mt-6 p-4 border-l-4 rounded ${
+            isNegative 
+              ? 'bg-red-50 border-red-500' 
+              : 'bg-green-50 border-green-500'
+          }`}>
+            <h3 className={`font-semibold mb-2 ${
+              isNegative ? 'text-red-900' : 'text-green-900'
+            }`}>
+              Prediction Result:
+            </h3>
+            <p className={`text-2xl font-bold ${
+              isNegative ? 'text-red-700' : 'text-green-700'
+            }`}>
+              {displayText}
+            </p>
+            {result.message && (
+              <p className={`text-sm mt-2 ${
+                isNegative ? 'text-red-600' : 'text-green-600'
+              }`}>
+                {result.message}
+              </p>
+            )}
+          </div>
+        );
+      })()}
 
       {/* Error Display */}
       {error && (

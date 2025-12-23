@@ -73,10 +73,14 @@ export interface ApiResponse<T> {
 export interface PredictionRequest {
   gender: 'F' | 'M';
   age_band: '0-35' | '35-55' | '55<=';
-  studied_credits: number;
-  num_of_prev_attempts: number;
-  total_clicks: number;
-  avg_assessment_score: number;
+  studied_credits: number | string;
+  num_of_prev_attempts: number | string;
+  total_clicks: number | string;
+  avg_assessment_score: number | string;
+}
+
+export interface PredictionByIdRequest {
+  student_id: number;
 }
 
 export interface PredictionResponse {

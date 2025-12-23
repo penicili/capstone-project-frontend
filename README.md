@@ -62,8 +62,10 @@ API service sudah disiapkan di `lib/api/` dengan struktur modular:
 - **GET `/api/kpi/overview`** - Fetch KPI dashboard data
 
 **Prediction APIs (`lib/api/predictions.ts`):**
-- **POST `/api/predict/final-result`** - Predict student final result
-- **POST `/api/predict/dropout`** - Predict student dropout risk
+- **POST `/api/predict/final-result`** - Predict student final result (manual input)
+- **POST `/api/predict/dropout`** - Predict student dropout risk (manual input)
+- **GET `/api/predict/final-result/:id`** - Predict student final result by student ID
+- **GET `/api/predict/dropout/:id`** - Predict student dropout risk by student ID
 
 **Model APIs (`lib/api/models.ts`):**
 - **GET `/api/models/status`** - Fetch model status
@@ -106,13 +108,19 @@ Dashboard menampilkan metrics dalam 2 kategori:
 
 ### Tab 2: Make Prediction
 
-Form interaktif untuk memprediksi student outcomes dengan 6 features:
+Form interaktif untuk memprediksi student outcomes dengan 2 mode input:
+
+**Mode 1: Manual Input**
+Form dengan 6 features:
 - Gender (F/M)
 - Age Band (0-35, 35-55, 55<=)
 - Studied Credits
 - Previous Attempts
 - Total VLE Clicks
 - Average Assessment Score (0-100)
+
+**Mode 2: By Student ID**
+Input menggunakan student ID untuk mendapatkan prediksi langsung dari data mahasiswa yang sudah ada.
 
 Dua model prediksi tersedia:
 1. **Final Result Prediction** - Prediksi hasil akhir mahasiswa (Pass/Fail/Distinction/Withdrawn)
@@ -133,7 +141,13 @@ Dua model prediksi tersedia:
 
 ```typescript
 // Import dari central API
-import { fetchKPIData, predictFinalResult, predictDropout } from '@/lib/api';
+import { 
+  fetchKPIData, 
+  predictFinalResult, 
+  predictDropout,
+  predictFinalResultById,
+  predictDropoutById 
+} from '@/lib/api';
 import type { PredictionRequest, PredictionResponse } from '@/types/dashboard';
 ```
 
@@ -143,7 +157,7 @@ import type { PredictionRequest, PredictionResponse } from '@/types/dashboard';
 const kpiData = await fetchKPIData();
 ```
 
-### Make Prediction
+### Make Prediction (Manual Input)
 
 ```typescript
 const request: PredictionRequest = {
@@ -156,6 +170,14 @@ const request: PredictionRequest = {
 };
 
 const result = await predictFinalResult(request);
+console.log(result.prediction); // "Pass", "Fail", "Distinction", or "Withdrawn"
+```
+
+### Make Prediction (By Student ID)
+
+```typescript
+const studentId = 123;
+const result = await predictFinalResultById(studentId);
 console.log(result.prediction); // "Pass", "Fail", "Distinction", or "Withdrawn"
 ```
 
