@@ -49,14 +49,14 @@ export default function Sidebar({ isExpanded, onExpandChange }: SidebarProps) {
         onMouseEnter={() => onExpandChange(true)}
         onMouseLeave={() => onExpandChange(false)}
         className={cn(
-          'fixed left-0 top-0 h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white transition-all duration-300 ease-in-out z-50 flex flex-col shadow-2xl',
+          'fixed left-0 top-0 h-screen bg-linear-to-b from-slate-900 to-slate-800 text-white transition-all duration-300 ease-in-out z-50 flex flex-col shadow-2xl',
           isExpanded ? 'w-64' : 'w-16'
         )}
       >
         {/* Logo Section */}
         <div className="p-4 border-b border-slate-700/50">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg">
+            <div className="w-8 h-8 bg-linear-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center shrink-0 shadow-lg">
               <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
@@ -89,7 +89,7 @@ export default function Sidebar({ isExpanded, onExpandChange }: SidebarProps) {
                         : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
                     )}
                   >
-                    <div className={cn('flex-shrink-0', isActive && 'scale-110')}>
+                    <div className={cn('shrink-0', isActive && 'scale-110')}>
                       {item.icon}
                     </div>
                     <span
@@ -118,7 +118,7 @@ export default function Sidebar({ isExpanded, onExpandChange }: SidebarProps) {
         {/* User Section (Bottom) */}
         <div className="p-4 border-t border-slate-700/50">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 bg-linear-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shrink-0">
               <span className="text-white font-bold text-sm">A</span>
             </div>
             <div

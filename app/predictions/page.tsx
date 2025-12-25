@@ -5,7 +5,7 @@ import PageHeader from '@/components/layout/PageHeader';
 
 export default function PredictionsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100">
       <PageHeader
         title="Student Prediction Model"
         description="Enter student information to predict their final result or dropout risk"
