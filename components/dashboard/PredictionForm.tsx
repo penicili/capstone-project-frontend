@@ -109,9 +109,8 @@ export default function PredictionForm() {
         </div>
       </div>
 
-      {/* Form Card */}
-      <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-        <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-6">
         {inputMode === 'id' ? (
           /* Student ID Input */
           <div className="bg-white rounded-lg p-6 border border-slate-200">
@@ -275,7 +274,6 @@ export default function PredictionForm() {
           )}
         </button>
       </form>
-      </div>
 
       {/* Result Display */}
       {result && (() => {

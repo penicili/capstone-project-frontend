@@ -14,7 +14,7 @@ export default function PredictionsPage() {
         ]}
       />
 
-      <div className="px-6 py-8">
+      <div className="px-6 py-6">
         <PredictionForm />
       </div>
     </>
