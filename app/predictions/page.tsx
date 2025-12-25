@@ -8,13 +8,13 @@ export default function PredictionsPage() {
     <>
       <PageHeader
         title="Student Prediction Model"
-        description="Enter student information to predict their final result or dropout risk"
+        description="Student result prediction using machine learning"
         breadcrumbs={[
           { label: 'Predictions' }
         ]}
       />
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="px-6 py-8">
         <PredictionForm />
       </div>
     </>

@@ -38,7 +38,7 @@ export default function Home() {
     <>
       <PageHeader
         title="Student Performance Metrics"
-        description="Monitor key performance indicators from OULAD dataset"
+        description="KPI dashboard for student performance"
         subtitle={kpiData ? `Last updated: ${new Date(kpiData.lastUpdated).toLocaleString()}` : undefined}
         breadcrumbs={[
           { label: 'Student Metrics' }
@@ -57,7 +57,7 @@ export default function Home() {
         }
       />
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="px-6 py-8">
 
         {/* Content */}
         <div className="space-y-6">

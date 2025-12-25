@@ -67,14 +67,14 @@ export default function Sidebar({ isExpanded, onExpandChange }: SidebarProps) {
                 isExpanded ? 'opacity-100 w-auto' : 'opacity-0 w-0 overflow-hidden'
               )}
             >
-              <h2 className="font-bold text-lg whitespace-nowrap">OULAD</h2>
-              <p className="text-xs text-slate-400 whitespace-nowrap">Analytics</p>
+              <h2 className="font-bold text-lg whitespace-nowrap">LMS Data Center</h2>
+              <p className="text-xs text-slate-400 whitespace-nowrap">KPI and prediction model</p>
             </div>
           </div>
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 py-6 px-2 overflow-y-auto">
+        <nav className="flex-1 py-6 px-2">
           <ul className="space-y-2">
             {sidebarItems.map((item) => {
               const isActive = pathname === item.href;
@@ -116,7 +116,7 @@ export default function Sidebar({ isExpanded, onExpandChange }: SidebarProps) {
         </nav>
 
         {/* User Section (Bottom) */}
-        <div className="p-4 border-t border-slate-700/50">
+        {/* <div className="p-4 border-t border-slate-700/50">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-linear-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shrink-0">
               <span className="text-white font-bold text-sm">A</span>
@@ -131,7 +131,7 @@ export default function Sidebar({ isExpanded, onExpandChange }: SidebarProps) {
               <p className="text-xs text-slate-400 whitespace-nowrap">admin@oulad.com</p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Expand/Collapse Indicator */}
         <div
