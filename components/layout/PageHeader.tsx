@@ -24,8 +24,9 @@ export default function PageHeader({
   subtitle,
 }: PageHeaderProps) {
   return (
-    <div className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm mb-6">
       <div className="max-w-7xl mx-auto px-6 py-4">
+
         {/* Breadcrumbs */}
         {breadcrumbs && breadcrumbs.length > 0 && (
           <nav className="flex items-center gap-2 text-sm mb-3">
@@ -60,16 +61,16 @@ export default function PageHeader({
         {/* Header Content */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-slate-900 mb-1">
+            <h1 className="text-2xl font-bold text-slate-900 mb-1">
               {title}
             </h1>
             {description && (
-              <p className="text-slate-600 text-base">
+              <p className="text-slate-600 text-sm">
                 {description}
               </p>
             )}
             {subtitle && (
-              <p className="text-slate-500 text-sm mt-1">
+              <p className="text-slate-500 text-xs mt-1">
                 {subtitle}
               </p>
             )}

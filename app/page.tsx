@@ -35,7 +35,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100">
+    <>
       <PageHeader
         title="Student Performance Metrics"
         description="Monitor key performance indicators from OULAD dataset"
@@ -93,6 +93,6 @@ export default function Home() {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }

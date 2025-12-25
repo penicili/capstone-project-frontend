@@ -5,7 +5,7 @@ import PageHeader from '@/components/layout/PageHeader';
 
 export default function PredictionsPage() {
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100">
+    <>
       <PageHeader
         title="Student Prediction Model"
         description="Enter student information to predict their final result or dropout risk"
@@ -17,6 +17,6 @@ export default function PredictionsPage() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         <PredictionForm />
       </div>
-    </div>
+    </>
   );
 }
