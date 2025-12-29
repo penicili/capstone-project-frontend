@@ -94,7 +94,8 @@ export default function ModelPredictionChart({ model }: ModelPredictionChartProp
                 borderRadius: '8px',
                 color: '#fff',
               }}
-              formatter={(value: number | string) => {
+              formatter={(value: number | string | undefined) => {
+                if (value === undefined) return '';
                 if (typeof value === 'number') {
                   return new Intl.NumberFormat('id-ID').format(value);
                 }
