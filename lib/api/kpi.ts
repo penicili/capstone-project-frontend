@@ -22,10 +22,16 @@ const KPI_TARGETS: Record<string, number> = {
   'Assignment Timeliness': 85,
   'Quiz Participation Rate': 85,
   'Grade Performance Index': 70,
-  'Low Activity Alert Index': 5, // lower is better
-  'Predicted Dropout Risk': 20, // lower is better
+  'Low Activity Alert Index': 20, // lower is better
+  'Predicted Dropout Risk': 5, // lower is better
   'Attendance Consistency Score': 85,
 };
+
+// KPIs where lower values are better
+const LOWER_IS_BETTER_KPIS = new Set([
+  'Low Activity Alert Index',
+  'Predicted Dropout Risk',
+]);
 
 /**
  * Fetch KPI dashboard data from new endpoint
@@ -62,6 +68,7 @@ export async function fetchKPIData(): Promise<KPIDashboardData> {
         value: typeof kpi.value === 'string' ? Number(kpi.value) : kpi.value,
         unit: kpi.unit,
         target: KPI_TARGETS[kpi.name],
+        lowerIsBetter: LOWER_IS_BETTER_KPIS.has(kpi.name),
         description: kpi.definition,
       };
       

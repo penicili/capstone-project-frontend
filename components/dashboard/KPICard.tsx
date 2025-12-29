@@ -28,9 +28,17 @@ export default function KPICard({ metric }: KPICardProps) {
     if (target === undefined || target === null || typeof value !== 'number') return null;
     const targetNum = typeof target === 'string' ? parseFloat(target) : target;
     if (isNaN(targetNum) || targetNum === 0) return null;
+    
+    // Always calculate: (actual / target) * 100
     const percentage = ((value / targetNum) * 100).toFixed(1);
     const diff = value - targetNum;
-    const isAchieved = value >= targetNum;
+    
+    // For "lower is better": achieved if value <= target
+    // For "higher is better": achieved if value >= target
+    const isAchieved = metric.lowerIsBetter 
+      ? value <= targetNum 
+      : value >= targetNum;
+    
     return { percentage: parseFloat(percentage), diff, isAchieved };
   };
 
@@ -39,6 +47,14 @@ export default function KPICard({ metric }: KPICardProps) {
   const getAchievementColor = () => {
     if (!targetData) return 'text-gray-600';
     if (targetData.isAchieved) return 'text-green-600';
+    
+    // For lower is better: yellow if slightly above target, red if way above
+    if (metric.lowerIsBetter) {
+      if (targetData.percentage <= 120) return 'text-yellow-600';
+      return 'text-red-600';
+    }
+    
+    // For higher is better: yellow if close to target, red if far below
     if (targetData.percentage >= 80) return 'text-yellow-600';
     return 'text-red-600';
   };

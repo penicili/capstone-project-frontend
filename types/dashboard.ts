@@ -5,6 +5,7 @@ export interface KPIMetric {
   value: number | string;
   unit?: string;
   target?: number; // target value for comparison
+  lowerIsBetter?: boolean; // true if lower values are better (e.g., dropout risk)
   change?: number; // percentage change (deprecated, use target instead)
   changeType?: 'increase' | 'decrease' | 'neutral';
   trend?: number[]; // array of historical values for sparkline
