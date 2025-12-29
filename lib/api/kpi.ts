@@ -19,10 +19,10 @@ const KPI_TARGETS: Record<string, number> = {
   'Course Engagement Score': 75,
   'Attendance Consistency': 85,
   'Task Completion Ratio': 80,
-  'Assignment Timeliness': 75,
+  'Assignment Timeliness': 85,
   'Quiz Participation Rate': 85,
   'Grade Performance Index': 70,
-  'Low Activity Alert Index': 15, // lower is better
+  'Low Activity Alert Index': 5, // lower is better
   'Predicted Dropout Risk': 20, // lower is better
   'Attendance Consistency Score': 85,
 };
