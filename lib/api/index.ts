@@ -1,3 +1,5 @@
+'use server';
+
 /**
  * API Client - Centralized export for all API functions
  */
