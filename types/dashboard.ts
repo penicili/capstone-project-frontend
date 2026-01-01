@@ -86,6 +86,6 @@ export interface PredictionByIdRequest {
 
 export interface PredictionResponse {
   success: boolean;
-  prediction: string;
+  prediction: string | number;
   message?: string;
 }

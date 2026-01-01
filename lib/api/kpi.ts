@@ -25,6 +25,7 @@ const KPI_TARGETS: Record<string, number> = {
   'Low Activity Alert Index': 20, // lower is better
   'Predicted Dropout Risk': 5, // lower is better
   'Attendance Consistency Score': 85,
+  'Forum Participation Score': 2500000,
 };
 
 // KPIs where lower values are better
